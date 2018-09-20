@@ -18,8 +18,8 @@ class MainDownload:
 
     def cmd_download(self,url):
         try:
-            info = os.system(r'you-get --debug -o /Users/xulei2/Downloads  {}'.format(url))
-            print(info)
+            info = os.system(r'you-get -o /Users/xulei2/Downloads  {}'.format(url))
+            print("OS.SYSTEM :"+info)
         except Exception as e:
             # print(e)
             print("error exist ,re-download")

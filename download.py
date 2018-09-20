@@ -6,25 +6,34 @@
 
 import os
 import requests
-from pyquery import PyQuery as pq
+import json
+from bs4 import BeautifulSoup
 
-
+"""
+根据up主的所有视频页面来爬取他所有的视频
+"""
 def get_urls(url):
     """
     解析网页数据，获得目标url
     """
-    response = requests.get(url)
-    if response.status_code == 200:
-        # print(response.text)
-        html = response.text
-        doc = pq(html)
-        a_list = doc('li.video a.title')
-        # print(a_list)
-        print(type(a_list))
-        url_list = [a.attr('href').strip('//') for a in a_list.items()]
-        print(url_list)
-        return url_list
-    return None
+    response = requests.get(url, verify=False)
+    print(response.text)
+    json_dict = json.loads(response.text)
+    result_list = analyseJson(json_dict)
+    print(len(result_list))
+    return result_list
+
+def analyseJson(json_dict):
+
+    status = json_dict['status']
+    data = json_dict['data']
+    vlist = data['vlist']
+    video_url = []
+    for sub_list in vlist:
+        aid = sub_list['aid']
+        temp_url = 'https://www.bilibili.com/video/av'+str(aid)
+        video_url.append(temp_url)
+    return video_url
 
 
 def cmd_download(url):
@@ -59,4 +68,4 @@ def test(url):
 
 
 if __name__ == '__main__':
-    test("https://www.bilibili.com/bangumi/play/ep205871")
+    print(get_urls("https://space.bilibili.com/ajax/member/getSubmitVideos?mid=617285&pagesize=100&tid=0&page=&keyword=&order=pubdate"))
