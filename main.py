@@ -3,10 +3,10 @@
 # @Time : 2018/9/20
 # @Author : lei.X
 
-import requests
 from configparser import RawConfigParser
 import os
 from multiprocessing import Process
+from download import *
 
 class MainDownload:
     def __init__(self):
@@ -18,7 +18,7 @@ class MainDownload:
 
     def cmd_download(self,url):
         try:
-            info = os.system(r'you-get -o /Users/xulei2/Downloads  {}'.format(url))
+            info = os.system(r'lulu --debug -o /Users/xulei2/Downloads  {}'.format(url))
             print("OS.SYSTEM :"+info)
         except Exception as e:
             # print(e)
@@ -52,6 +52,11 @@ class MainDownload:
 if __name__ == '__main__':
 
     mainDownload = MainDownload()
-    url_list = mainDownload.generate_download_url()
+    """
+    适用于视频号连接在一起的视频
+    """
+    # url_list = mainDownload.generate_download_url()
+
+    url_list = getUpsVideoUrl("617285",1)
     mainDownload.multi_download(url_list)
 
